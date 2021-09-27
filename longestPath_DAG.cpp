@@ -17,6 +17,21 @@ void topoSort(vector<pair<int,int>> adj[],vector<bool> vis,int node) {
 }
 
 
+void dfs(vector<pair<int,int>> adj[],vector<bool> visited,int node)
+{
+    visited[node]=true;
+    for(auto it:adj[node])
+    {
+        if(!visited[it.first])
+        {
+            it.second=-1*it.second;
+            dfs(adj,visited,it.first);
+         }
+            
+    }
+}
+
+
 int main()
 {
     int n,e;
@@ -29,6 +44,9 @@ int main()
         cin>>u>>v>>w;
         adj[u].push_back({v,w});
     }
+    vector<bool> visited(n,false);
+
+    dfs(adj,visited,0);
     
     vector<bool> vis(n,false);
     topoSort(adj,vis,0);
@@ -42,7 +60,7 @@ int main()
         s.pop();
         for(auto it:adj[temp])
         {
-            int cost=dis[temp]+it.second;
+            int cost=-1*(dis[temp]+it.second);
             if(cost<dis[it.first])
             {
                 dis[it.first]=cost;
@@ -53,7 +71,7 @@ int main()
     cout<<"The shortest distance is "<<endl;
     for(int i=0;i<dis.size();i++)
     {
-        cout<<i<<"->"<<dis[i]<<endl;
+        cout<<i<<"->"<<dis[i]*-1<<endl;
     }
 
     return 0;
